@@ -1,9 +1,11 @@
 package com.groupsoftware.minhasfinancas.api.controller;
 
+import com.groupsoftware.minhasfinancas.api.dto.TokenDTO;
 import com.groupsoftware.minhasfinancas.api.dto.UsuarioDTO;
 import com.groupsoftware.minhasfinancas.exception.AutenticacaoException;
 import com.groupsoftware.minhasfinancas.exception.RegraNegocioException;
 import com.groupsoftware.minhasfinancas.model.entity.Usuario;
+import com.groupsoftware.minhasfinancas.service.JwtService;
 import com.groupsoftware.minhasfinancas.service.LancamentoService;
 import com.groupsoftware.minhasfinancas.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -20,19 +22,21 @@ import java.util.Optional;
 public class UsuarioController {
     private final UsuarioService service;
     private final LancamentoService lancamentoService;
+    private final JwtService jwtService;
 
     /*Quando é adicionado um bean gerenciado pelo Spring (RestController) e uma dependência
      no construtor (UsuarioServive) o spring já faz a injeção sem o Autowired.*/
 
     @PostMapping("/autenticar")
-    public ResponseEntity autenticar(@RequestBody UsuarioDTO dto) {
+    public ResponseEntity<?> autenticar(@RequestBody UsuarioDTO dto) {
         try {
             Usuario usuarioAutenticado = service.autenticar(dto.getEmail(), dto.getSenha());
-            return ResponseEntity.ok(usuarioAutenticado);
+            String token = jwtService.gerarToken(usuarioAutenticado);
+            TokenDTO tokenDTO = new TokenDTO(usuarioAutenticado.getNome(), token);
+            return ResponseEntity.ok(tokenDTO);
         } catch (AutenticacaoException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-
     }
 
     // Representa o corpo da resposta

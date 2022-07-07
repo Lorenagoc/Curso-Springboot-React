@@ -6,19 +6,20 @@ import com.groupsoftware.minhasfinancas.model.entity.Usuario;
 import com.groupsoftware.minhasfinancas.model.repository.UsuarioRepository;
 import com.groupsoftware.minhasfinancas.service.impl.UsuarioServiceImpl;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 public class UsuarioServiceTest {
     @SpyBean // Comportamento parecido com MockBean. Chama o método original ao menos que diga como será o comportamento do método simulado.
@@ -26,7 +27,7 @@ public class UsuarioServiceTest {
     @MockBean // Simula uma injeção de dependência
     UsuarioRepository repository;
 
-    @Test(expected = Test.None.class)
+    @Test
     public void testaSalvarUsuario() {
         // cenário
         Mockito.doNothing().when(service).validarEmail(Mockito.anyString());
@@ -45,7 +46,7 @@ public class UsuarioServiceTest {
         Assertions.assertThat(usuarioSalvo.getSenha()).isEqualTo("senha");
     }
 
-    @Test(expected = RegraNegocioException.class)
+    @Test
     public void testaSalvarUsuarioComEmailCadastradoException() {
         // cenário
         String email = "email@email.com";
@@ -61,7 +62,7 @@ public class UsuarioServiceTest {
         Mockito.verify(repository, Mockito.never()).save(usuario);
     }
 
-    @Test(expected = Test.None.class)
+    @Test
     public void autenticaUsuarioComSucesso() {
         // cenário
         String email = "email@email.com";
@@ -104,7 +105,7 @@ public class UsuarioServiceTest {
         Assertions.assertThat(exception).isInstanceOf(AutenticacaoException.class).hasMessage("Senha inválida.");
     }
 
-    @Test(expected = Test.None.class)
+    @Test
     public void validaEmail() {
         // cenário
         /*repository.deleteAll();*/
@@ -115,7 +116,7 @@ public class UsuarioServiceTest {
         service.validarEmail("email@email.com");
     }
 
-    @Test(expected = RegraNegocioException.class)
+    @Test
     public void validaEmailException() {
         // cenário
         /* Usuario usuario = Usuario.builder().nome("usuario").email("email@email.com").build();
