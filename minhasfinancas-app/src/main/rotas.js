@@ -5,6 +5,7 @@ import Home from "../views/home";
 import CadastroUsuario from "../views/cadastroUsuario";
 import ConsultaLancamentos from "../views/lancamentos/consultaLancamentos";
 import CadastroLancamentos from "../views/lancamentos/cadastroLancamentos";
+import LandingPage from "../views/landingPage";
 import { AuthConsumer } from "../main/provedorAutenticacao";
 
 import { Route, Switch, Redirect, HashRouter } from "react-router-dom";
@@ -40,6 +41,7 @@ function Rotas(props) {
 	return (
 		<HashRouter>
 			<Switch>
+				<Route exact path="/" component={LandingPage} />
 				<Route exact path="/login" component={Login} />
 				<Route exact path="/cadastro-usuarios" component={CadastroUsuario} />
 
