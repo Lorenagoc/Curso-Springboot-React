@@ -40,8 +40,7 @@ class Login extends React.Component {
 		return (
 			<div className="row">
 				<div
-					className="col-md-6"
-					style={{ position: "relative", left: "300px" }}
+					className="col-md-6 offset-md-3"
 				>
 					<div className="bs-docs-section">
 						<Card title="Login">
